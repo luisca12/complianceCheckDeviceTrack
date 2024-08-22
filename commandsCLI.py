@@ -7,7 +7,7 @@ import os
 shHostname = "show run | i hostname"
 shRunDevice = "show run | sec device-sensor|device-tracking"
 
-shVlanID1105 = "show vlan id 1105"
+shVlanID20 = "show vlan id 20"
 
 deviceTrackingConf = [
     'device-sensor filter-list lldp list lldp-list',
@@ -83,34 +83,37 @@ def complCheck(validIPs, username, netDevice):
                     authLog.info(f"User {username} successfully found the hostname {shHostnameOut}")
                     shHostnameOut = shHostnameOut.replace('hostname', '').strip() + "#"
                         
-                    print(f"INFO: Taking a \"{shVlanID1105}\" for device: {validDeviceIP}")
-                    shVlanID1105Out = sshAccess.send_command(shVlanID1105)
-                    authLog.info(f"Automation successfully ran the command:{shVlanID1105}\n{shHostnameOut}{shVlanID1105}\n{shVlanID1105Out}")
+                    print(f"INFO: Taking a \"{shVlanID20}\" for device: {validDeviceIP}")
+                    shVlanID20Out = sshAccess.send_command(shVlanID20)
+                    authLog.info(f"Automation successfully ran the command:{shVlanID20}\n{shHostnameOut}{shVlanID20}\n{shVlanID20Out}")
 
-                    if "not found" in shVlanID1105Out:
-                        print(f"INFO: Device {validDeviceIP} does not have VLAN 1105, skipping device...")
-                        authLog.info(f"Device {validDeviceIP} does not have VLAN 1105, skipping device...")
-                        continue   
+                    if "not found" in shVlanID20Out:
+                        print(f"INFO: Device: {validDeviceIP}, is an Elevance Site device")
+                        authLog.info(f"Device: {validDeviceIP}, is an Elevance Site device")   
 
-                    print(f"INFO: Taking a \"{shRunDevice}\" for device: {validDeviceIP}")
-                    shRunDeviceOut = sshAccess.send_command(shRunDevice)
-                    authLog.info(f"Automation successfully ran the command:{shRunDevice}\n{shHostnameOut}{shRunDevice}\n{shRunDeviceOut}")
+                        print(f"INFO: Taking a \"{shRunDevice}\" for device: {validDeviceIP}")
+                        shRunDeviceOut = sshAccess.send_command(shRunDevice)
+                        authLog.info(f"Automation successfully ran the command:{shRunDevice}\n{shHostnameOut}{shRunDevice}\n{shRunDeviceOut}")
 
-                    for index, item in enumerate(deviceTrackingConf):
-                        if not item in shRunDeviceOut:
-                            missingConfig.append(item)
-                            authLog.info(f"Configuration: {item} is missing from device {validDeviceIP}")
-                        else:
-                            configInDevice.append(item)
-                            authLog.info(f"Configuration: {item} was found on device {validDeviceIP}")
-            
-                    with open(f"Outputs/{validDeviceIP}_complianceCheck-DevTrack.txt", "a") as file:
-                        file.write(f"User {username} connected to device IP {validDeviceIP}\n\n")
-                        file.write("="*20,f"Below is the missing configuration:\n")
-                        file.write(f"{shHostnameOut}\n{'\n'.join(missingConfig)}\n\n")
-                        file.write("="*20,f"Below is the current configuration:\n")
-                        file.write(f"{shHostnameOut}{shRunDevice}\n{'\n'.join(configInDevice)}\n\n")
-                        authLog.info(f"File {validDeviceIP}_dhcpSnoopCheck.txt was created successfully.")
+                        for index, item in enumerate(deviceTrackingConf):
+                            if not item in shRunDeviceOut:
+                                missingConfig.append(item)
+                                authLog.info(f"Configuration: {item} is missing from device {validDeviceIP}")
+                            else:
+                                configInDevice.append(item)
+                                authLog.info(f"Configuration: {item} was found on device {validDeviceIP}")
+                
+                        with open(f"Outputs/{validDeviceIP}_complianceCheck-DevTrack.txt", "a") as file:
+                            file.write(f"User {username} connected to device IP {validDeviceIP}\n\n")
+                            file.write("="*20,f"Below is the missing configuration:\n")
+                            file.write(f"{shHostnameOut}\n{'\n'.join(missingConfig)}\n\n")
+                            file.write("="*20,f"Below is the current configuration:\n")
+                            file.write(f"{shHostnameOut}{shRunDevice}\n{'\n'.join(configInDevice)}\n\n")
+                            authLog.info(f"File {validDeviceIP}_dhcpSnoopCheck.txt was created successfully.")
+                    else:
+                        print(f"INFO: Device: {validDeviceIP}, is a Caremore Site device")
+                        authLog.info(f"Device: {validDeviceIP}, is a Caremore Site device")   
+                        continue
 
                 except Exception as error:
                     print(f"ERROR: An error occurred: {error}\n", traceback.format_exc())
