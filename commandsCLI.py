@@ -56,7 +56,7 @@ missingConfig = []
 # Regex Patterns
 intPatt = r'[a-zA-Z]+\d+\/(?:\d+\/)*\d+'
 
-def dhcpSnooopTr(validIPs, username, netDevice):
+def complCheck(validIPs, username, netDevice):
     # This function is to take a show run
 
     for validDeviceIP in validIPs:
