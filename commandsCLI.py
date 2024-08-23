@@ -105,9 +105,11 @@ def complCheck(validIPs, username, netDevice):
                 
                         with open(f"Outputs/{validDeviceIP}_complianceCheck-DevTrack.txt", "a") as file:
                             file.write(f"User {username} connected to device IP {validDeviceIP}\n\n")
-                            file.write("="*20,f"Below is the missing configuration:\n")
+                            file.write("="*20 + "\n")
+                            file.write(f"Below is the missing configuration:\n")
                             file.write(f"{shHostnameOut}\n{'\n'.join(missingConfig)}\n\n")
-                            file.write("="*20,f"Below is the current configuration:\n")
+                            file.write("="*20 + "\n")
+                            file.write(f"Below is the current configuration:\n")
                             file.write(f"{shHostnameOut}{shRunDevice}\n{'\n'.join(configInDevice)}\n\n")
                             authLog.info(f"File {validDeviceIP}_dhcpSnoopCheck.txt was created successfully.")
                     else:
