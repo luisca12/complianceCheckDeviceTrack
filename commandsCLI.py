@@ -81,7 +81,8 @@ def complCheck(validIPs, username, netDevice):
                     sshAccess.enable()
                     shHostnameOut = sshAccess.send_command(shHostname)
                     authLog.info(f"User {username} successfully found the hostname {shHostnameOut}")
-                    shHostnameOut = shHostnameOut.replace('hostname', '').strip() + "#"
+                    shHostnameOut = shHostnameOut.split(' ')[1]
+                    shHostnameOut = shHostnameOut + "#"
                         
                     print(f"INFO: Taking a \"{shVlanID20}\" for device: {validDeviceIP}")
                     shVlanID20Out = sshAccess.send_command(shVlanID20)
