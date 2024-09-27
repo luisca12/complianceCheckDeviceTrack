@@ -31,27 +31,8 @@ deviceTrackingConf = [
     'device-sensor filter-spec lldp include list lldp-list',
     'device-sensor filter-spec cdp include list cdp-list',
     'device-sensor accounting',
-    'device-sensor notify all-changes',
-    'device-tracking tracking auto-source',
-    'device-tracking policy DEVTRK',
-    'security-level glean',
-    'tracking enable',
-    'no protocol ndp',
-    'no protocol dhcp6',
-    'no protocol udp',
-    'device-tracking policy DT_TRUNK',
-    'trusted-port',
-    'device-role switch',
-    'no protocol udp',
-    'dot1x system-auth-control'
+    'device-sensor notify all-changes'
 ]
-
-deviceTranckIntConf = [
-    'device-tracking attach-policy DEVTRK'
-]
-
-configInDevice = []
-missingConfig = []
 
 # Regex Patterns
 intPatt = r'[a-zA-Z]+\d+\/(?:\d+\/)*\d+'
@@ -60,6 +41,8 @@ def complCheck(validIPs, username, netDevice):
     # This function is to take a show run
 
     for validDeviceIP in validIPs:
+        configInDevice = []
+        missingConfig = []
         try:
             validDeviceIP = validDeviceIP.strip()
             currentNetDevice = {
