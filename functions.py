@@ -119,3 +119,17 @@ def requestLogin(validIPs):
 
 def checkYNInput(stringInput):
     return stringInput.lower() == 'y' or stringInput.lower() == 'n'
+
+def failedDevices(username,validDeviceIP="",error=""):
+    authLog.error(f"Device: {validDeviceIP} had an error")
+    authLog.error(traceback.format_exc())
+    with open(f"Outputs/failedDevices.txt","a") as failedDevices:
+        failedDevices.write(f"User {username} connected to {validDeviceIP} got an error:\n{error}.\n")
+
+def logInCSV(validDeviceIP, filename=""):
+    print(f"INFO: File created: {filename}")
+    authLog.info(f"File created: {filename}")
+    with open(f'Outputs/{filename}.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([validDeviceIP])
+        authLog.info(f"Appended device: {validDeviceIP} to file {filename}")
